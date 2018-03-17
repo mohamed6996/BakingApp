@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/circle_shape">
+        <shape android:shape="oval">
+            <solid android:color="#9E9E9E" />
+        </shape>
+    </item>
+
+    <item>
+        <inset
+            android:insetBottom="5dp"
+            android:insetLeft="5dp"
+            android:insetRight="5dp"
+            android:insetTop="5dp">
+            <shape android:shape="oval">
+                <stroke
+                    android:width="2dp"
+                    android:color="#ffffff" />
+            </shape>
+        </inset>
+    </item>
+</layer-list>
