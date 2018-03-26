@@ -1,5 +1,6 @@
 package com.tastey.baking.bakingapp.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.tastey.baking.bakingapp.ListItemClickListener;
 import com.tastey.baking.bakingapp.R;
 import com.tastey.baking.bakingapp.model.RecipeModel;
@@ -21,9 +23,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     List<RecipeModel> recipes;
     ListItemClickListener listener;
+    Context context;
 
-    public RecipeAdapter(ListItemClickListener listener) {
+    public RecipeAdapter(ListItemClickListener listener, Context context) {
         this.listener = listener;
+        this.context = context;
     }
 
     @Override
@@ -60,26 +64,35 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
 
         void bind(int position) {
-            setImage(position);
             RecipeModel model = recipes.get(position);
             recipeName.setText(model.getName());
-
+            setImage(position, model);
         }
 
-        private void setImage(int position) {
+
+        private void setImage(int position, RecipeModel model) {
             switch (position) {
                 case 0:
-                    recipeImg.setImageResource(R.drawable.nutella_pie);
+                    if (model.getImage().isEmpty())
+                        recipeImg.setImageResource(R.drawable.nutella_pie);
+                    else Picasso.with(context).load(model.getImage()).into(recipeImg);
                     break;
                 case 1:
-                    recipeImg.setImageResource(R.drawable.brownies);
+                    if (model.getImage().isEmpty())
+                        recipeImg.setImageResource(R.drawable.brownies);
+                    else Picasso.with(context).load(model.getImage()).into(recipeImg);
                     break;
                 case 2:
-                    recipeImg.setImageResource(R.drawable.yellow_cake);
+                    if (model.getImage().isEmpty())
+                        recipeImg.setImageResource(R.drawable.yellow_cake);
+                    else Picasso.with(context).load(model.getImage()).into(recipeImg);
                     break;
                 case 3:
-                    recipeImg.setImageResource(R.drawable.cheese_cake);
+                    if (model.getImage().isEmpty())
+                        recipeImg.setImageResource(R.drawable.cheese_cake);
+                    else Picasso.with(context).load(model.getImage()).into(recipeImg);
                     break;
+
             }
         }
 

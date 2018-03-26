@@ -8,23 +8,23 @@
 
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-
         android:id="@+id/simple_exp_view"
         android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_height="350dp"
+        app:controller_layout_id="@layout/custom_playback_control"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:controller_layout_id="@layout/custom_playback_control"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <ImageView
-        android:visibility="invisible"
+        android:id="@+id/video_thumbnail"
         android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_height="350dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/video_thumbnail"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/step_long_desc"

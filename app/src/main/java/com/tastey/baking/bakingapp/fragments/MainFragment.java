@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,7 +40,8 @@ public class MainFragment extends Fragment implements ListItemClickListener {
     public static final String INTENT_EXTRA_RECIPES = "recipes";
     public static final String INTENT_EXTRA_POSITION = "position";
 
-    MyApp myApp ;
+    MyApp myApp;
+
     public MainFragment() {
         // Required empty public constructor
     }
@@ -63,8 +65,10 @@ public class MainFragment extends Fragment implements ListItemClickListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAdapter = new RecipeAdapter(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new RecipeAdapter(this, getContext());
+        int column_count = getResources().getInteger(R.integer.grid_column_count);
+        GridLayoutManager lm = new GridLayoutManager(getContext(), column_count);
+        mRecyclerView.setLayoutManager(lm);
         mRecyclerView.setAdapter(mAdapter);
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);

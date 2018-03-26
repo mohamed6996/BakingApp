@@ -32,7 +32,7 @@
         <activity
             android:name=".activities.StepInfoActivity"
             android:label="@string/title_activity_step_info"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.StepInfoActivity" />
 
         <receiver android:name=".widget.RecipeWidgetProvider">
             <intent-filter>

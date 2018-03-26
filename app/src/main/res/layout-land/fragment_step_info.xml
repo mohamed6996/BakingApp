@@ -8,19 +8,24 @@
 
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-
         android:id="@+id/simple_exp_view"
         android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp"
+        app:controller_layout_id="@layout/custom_playback_control"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:controller_layout_id="@layout/custom_playback_control"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:visibility="invisible"
         android:layout_width="0dp"
-        android:layout_height="250dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,8 +35,8 @@
         android:id="@+id/step_long_desc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="32dp"
         android:text="description goes here"
         app:layout_constraintEnd_toEndOf="parent"

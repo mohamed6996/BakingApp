@@ -18,16 +18,16 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static boolean mTWO_PANE = false;
+   // public static boolean mTWO_PANE = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (findViewById(R.id.step_info_container) != null) {
-            mTWO_PANE = true;
-        }
+//        if (findViewById(R.id.step_info_container) != null) {
+//            mTWO_PANE = true;
+//        }
 
     }
 }

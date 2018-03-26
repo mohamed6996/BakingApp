@@ -3,12 +3,16 @@ package com.tastey.baking.bakingapp.fragments;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +31,13 @@ import com.tastey.baking.bakingapp.model.RecipeModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.tastey.baking.bakingapp.activities.MainActivity.mTWO_PANE;
+import static com.tastey.baking.bakingapp.activities.DetailActivity.mTWO_PANE;
+
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DetailFragment extends Fragment implements ListItemClickListener {
+public class DetailFragment extends Fragment implements ListItemClickListener, AppBarLayout.OnOffsetChangedListener {
 
     @BindView(R.id.ingredient_rec_view)
     RecyclerView ingredientRecyclerView;
@@ -52,6 +57,12 @@ public class DetailFragment extends Fragment implements ListItemClickListener {
     int position;
     public static final String STEP_INFO_EXTRA = "step_info";
     public static final String STEP_INFO_POSITION = "step_info_position";
+
+    boolean isVisibile = false;
+
+    private int maxScrollSize;
+    private static final int PERCENTAGE_TO_SHOW_IMAGE = 20;
+    private boolean isImageHidden;
 
 
     public DetailFragment() {
@@ -80,9 +91,16 @@ public class DetailFragment extends Fragment implements ListItemClickListener {
             @Override
             public void onClick(View view) {
                 UpdateService.startUpdating(getContext(), recipes_json);
-                Toast.makeText(getContext(), "Added to widget", Toast.LENGTH_SHORT).show();
+                Snackbar.make(view, "Added to widget", Snackbar.LENGTH_SHORT).show();
+                //  Toast.makeText(getContext(), "Added to widget", Toast.LENGTH_SHORT).show();
             }
         });
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        AppBarLayout appBarLayout = view.findViewById(R.id.detail_appbar);
+        appBarLayout.addOnOffsetChangedListener(this);
 
         return view;
     }
@@ -103,6 +121,7 @@ public class DetailFragment extends Fragment implements ListItemClickListener {
         stepsAdapter.notifyDataSetChanged();
         stepRecyclerView.setAdapter(stepsAdapter);
 
+
     }
 
     @Override
@@ -111,16 +130,23 @@ public class DetailFragment extends Fragment implements ListItemClickListener {
         bundle.putString(STEP_INFO_EXTRA, recipes_json);
         bundle.putInt(STEP_INFO_POSITION, clickedItemIndex);
 
-        if (mTWO_PANE) { //todo app will crash in case of tablet mode as the placeHolderFrag is a child of view pager which inside
-                         // step info activity
-            PlaceholderFragment placeholderFragment = new PlaceholderFragment();
-            placeholderFragment.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.step_info_container, placeholderFragment).addToBackStack(null).commit();
+        if (mTWO_PANE) {
+            if (!isVisibile) {
+                StepDetailFragment stepDetailFragment = new StepDetailFragment();
+                stepDetailFragment.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.step_info_container, stepDetailFragment).commit();
+                isVisibile = true;
+            }
         } else {
-            Intent intent = new Intent(getActivity(), StepInfoActivity.class);
-            intent.putExtras(bundle);
-            startActivity(intent);
+//            Intent intent = new Intent(getActivity(), StepInfoActivity.class);
+//            intent.putExtras(bundle);
+//            startActivity(intent);
+            StepDetailFragment stepDetailFragment = new StepDetailFragment();
+            stepDetailFragment.setArguments(bundle);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.detail_fragment_container, stepDetailFragment).addToBackStack("null").commit();
+
         }
+
 
     }
 
@@ -139,6 +165,31 @@ public class DetailFragment extends Fragment implements ListItemClickListener {
                 recipeImage.setImageResource(R.drawable.cheese_cake);
                 break;
         }
+    }
+
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        // reference: https://github.com/saulmm/CoordinatorExamples
+        if (maxScrollSize == 0) maxScrollSize = appBarLayout.getTotalScrollRange();
+
+        int currentScrollPercentage = (Math.abs(verticalOffset)) * 100 / maxScrollSize;
+
+        if (currentScrollPercentage >= PERCENTAGE_TO_SHOW_IMAGE) {
+            if (!isImageHidden) {
+                isImageHidden = true;
+                ViewCompat.animate(fab).scaleX(0).scaleY(0).start();
+            }
+        }
+
+        if (currentScrollPercentage < PERCENTAGE_TO_SHOW_IMAGE) {
+            if (isImageHidden) {
+                isImageHidden = false;
+                ViewCompat.animate(fab).scaleX(1).scaleY(1).start();
+
+            }
+        }
+
     }
 
 }
