@@ -138,12 +138,12 @@ public class DetailFragment extends Fragment implements ListItemClickListener, A
                 isVisibile = true;
             }
         } else {
-//            Intent intent = new Intent(getActivity(), StepInfoActivity.class);
-//            intent.putExtras(bundle);
-//            startActivity(intent);
-            StepDetailFragment stepDetailFragment = new StepDetailFragment();
-            stepDetailFragment.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.detail_fragment_container, stepDetailFragment).addToBackStack("null").commit();
+            Intent intent = new Intent(getActivity(), StepInfoActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+//            StepDetailFragment stepDetailFragment = new StepDetailFragment();
+//            stepDetailFragment.setArguments(bundle);
+//            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.detail_fragment_container, stepDetailFragment).addToBackStack("null").commit();
 
         }
 

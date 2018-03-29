@@ -68,6 +68,7 @@ dependencies {
     // picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
+
     // just viewModel
     implementation 'android.arch.lifecycle:viewmodel:1.1.0'
     // just LiveData
@@ -77,6 +78,7 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:1.1.0"
     // exoPlayer
     implementation 'com.google.android.exoplayer:exoplayer:2.6.1'
+    implementation  'com.danikula:videocache:2.7.0'
     // schematic
     implementation 'net.simonvt.schematic:schematic:0.6.3'
     annotationProcessor 'net.simonvt.schematic:schematic-compiler:0.6.3'

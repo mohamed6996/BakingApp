@@ -38,6 +38,7 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         try {
             recipes_json = getArguments().getString(DetailFragment.STEP_INFO_EXTRA);
             received_index = getArguments().getInt(DetailFragment.STEP_INFO_POSITION, 0);
@@ -55,7 +56,7 @@ public class StepDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_step_detail, container, false);
-        setRetainInstance(true);
+        // setRetainInstance(true);
         try {
             toolbar = view.findViewById(R.id.step_info_toolbar);
             mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager(), recipeModel.getSteps(), recipes_json);

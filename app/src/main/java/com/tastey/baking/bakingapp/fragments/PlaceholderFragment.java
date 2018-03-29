@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,8 @@ public class PlaceholderFragment extends Fragment {
     @BindView(R.id.video_thumbnail)
     ImageView videoThumbnail;
 
+    SimpleExoPlayer simpleExoPlayer;
+
 
     public PlaceholderFragment() {
     }
@@ -60,47 +63,38 @@ public class PlaceholderFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         String recipes_json = getArguments().getString(DetailFragment.STEP_INFO_EXTRA);
         received_index = getArguments().getInt(DetailFragment.STEP_INFO_POSITION, 0);
         recipeModel = new Gson().fromJson(recipes_json, RecipeModel.class);
 
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-
-        savedInstanceState.putInt("current_window", currentWindow);
-        savedInstanceState.putLong("play_back_pos", playbackPosition);
 
     }
+//
+//    @Override
+//    public void onSaveInstanceState(Bundle savedInstanceState) {
+//        super.onSaveInstanceState(savedInstanceState);
+//        savedInstanceState.putInt("current_window", currentWindow);
+//        savedInstanceState.putLong("play_back_pos", playbackPosition);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_info, container, false);
         ButterKnife.bind(this, rootView);
-        setRetainInstance(true);
-        setPlayerVisibility();
+        //  setPlayerVisibility();
         StepModel stepModel = recipeModel.getSteps().get(getArguments().getInt(ARG_SECTION_NUMBER) - 1);
         if (stepModel.getDescription() != null) {
             step_desc.setText(stepModel.getDescription());
         }
 
+
+
+
         return rootView;
     }
 
-    private void setPlayerVisibility() {
-        StepModel stepModel = recipeModel.getSteps().get(getArguments().getInt(ARG_SECTION_NUMBER) - 1);
-        if (stepModel.getVideoURL().isEmpty()) {
-            playerView.setVisibility(View.GONE);
-        } else if (!stepModel.getThumbnailURL().isEmpty()) {
-            videoThumbnail.setVisibility(View.VISIBLE);
-            Picasso.with(getContext()).load(stepModel.getThumbnailURL()).into(videoThumbnail);
-        } else {
-            playerView.setVisibility(View.VISIBLE);
-        }
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -109,41 +103,49 @@ public class PlaceholderFragment extends Fragment {
             playbackPosition = savedInstanceState.getLong("play_back_pos");
             currentWindow = savedInstanceState.getInt("current_window");
         }
-
-        //   setRetainInstance(true);
-
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
         initializePlayer();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if ((Util.SDK_INT <= 23 || player == null)) {
-            initializePlayer();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//            initializePlayer();
+//    }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (Util.SDK_INT > 23) {
+        if(getActivity().isChangingConfigurations()) {
+            Log.i(getTag(), "configuration is changing: keep playing");
+        } else {
             releasePlayer();
         }
+
     }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if ((Util.SDK_INT <= 23 || player == null)) {
+//            initializePlayer();
+//        }
+//    }
+
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        if (Util.SDK_INT <= 23) {
+//            releasePlayer();
+//        }
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        if (Util.SDK_INT > 23) {
+//            releasePlayer();
+//        }
+//    }
 
     private void releasePlayer() {
         if (player != null) {
@@ -168,12 +170,13 @@ public class PlaceholderFragment extends Fragment {
             player.setPlayWhenReady(playWhenReady);
             player.seekTo(currentWindow, playbackPosition);
 
-            Uri uri = Uri.parse(recipeModel.getSteps().get(getArguments().getInt(ARG_SECTION_NUMBER) - 1).getVideoURL()); //todo
+            Uri uri = Uri.parse(recipeModel.getSteps().get(getArguments().getInt(ARG_SECTION_NUMBER) - 1).getVideoURL());
             MediaSource mediaSource = buildMediaSource(uri);
-            player.prepare(mediaSource, true, false);
+            player.prepare(mediaSource,false,false);
 
             videoThumbnail.setVisibility(View.GONE);
         }
+
     }
 
     private MediaSource buildMediaSource(Uri uri) {
@@ -190,5 +193,17 @@ public class PlaceholderFragment extends Fragment {
         args.putString(DetailFragment.STEP_INFO_EXTRA, recipeModel);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    private void setPlayerVisibility() {
+        StepModel stepModel = recipeModel.getSteps().get(getArguments().getInt(ARG_SECTION_NUMBER) - 1);
+        if (stepModel.getVideoURL().isEmpty()) {
+            playerView.setVisibility(View.GONE);
+        } else if (!stepModel.getThumbnailURL().isEmpty()) {
+            videoThumbnail.setVisibility(View.VISIBLE);
+            Picasso.with(getContext()).load(stepModel.getThumbnailURL()).into(videoThumbnail);
+        } else {
+            playerView.setVisibility(View.VISIBLE);
+        }
     }
 }
