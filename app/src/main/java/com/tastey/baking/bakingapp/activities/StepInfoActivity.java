@@ -23,10 +23,6 @@ import static com.tastey.baking.bakingapp.fragments.DetailFragment.STEP_INFO_POS
 
 public class StepInfoActivity extends AppCompatActivity {
 
-
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private Toolbar toolbar;
-    private ViewPager mViewPager;
     public static RecipeModel recipeModel;
     int received_index;
     String recipes_json;
@@ -39,13 +35,15 @@ public class StepInfoActivity extends AppCompatActivity {
         recipes_json = getIntent().getExtras().getString(STEP_INFO_EXTRA);
         received_index = getIntent().getExtras().getInt(STEP_INFO_POSITION, 0);
         recipeModel = new Gson().fromJson(recipes_json, RecipeModel.class);
-
+        Bundle bundle = new Bundle();
+        bundle.putString(STEP_INFO_EXTRA, recipes_json);
+        bundle.putInt(STEP_INFO_POSITION, received_index);
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentByTag("place_holder");
         if (fragment == null) {
-            Toast.makeText(this, "frag is null", Toast.LENGTH_SHORT).show();
-            PlaceholderFragment placeholderFragment = PlaceholderFragment.newInstance(received_index + 1, recipes_json);
-            manager.beginTransaction().add(R.id.step_activity_container, placeholderFragment, "place_holder").commit();
+            StepDetailFragment stepDetailFragment = new StepDetailFragment();
+            stepDetailFragment.setArguments(bundle);
+            manager.beginTransaction().add(R.id.step_activity_container, stepDetailFragment, "place_holder").commit();
         }
 
     }

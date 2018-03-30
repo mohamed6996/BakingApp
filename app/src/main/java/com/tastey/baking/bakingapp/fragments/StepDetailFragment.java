@@ -43,7 +43,6 @@ public class StepDetailFragment extends Fragment {
             recipes_json = getArguments().getString(DetailFragment.STEP_INFO_EXTRA);
             received_index = getArguments().getInt(DetailFragment.STEP_INFO_POSITION, 0);
             recipeModel = new Gson().fromJson(recipes_json, RecipeModel.class);
-            Toast.makeText(getContext(), "" + recipeModel.getSteps().get(received_index).getShortDescription(), Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Log.e("error_test", e.getMessage());
         }
@@ -56,7 +55,6 @@ public class StepDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_step_detail, container, false);
-        // setRetainInstance(true);
         try {
             toolbar = view.findViewById(R.id.step_info_toolbar);
             mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager(), recipeModel.getSteps(), recipes_json);

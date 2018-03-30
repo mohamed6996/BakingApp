@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -92,13 +93,12 @@ public class DetailFragment extends Fragment implements ListItemClickListener, A
             public void onClick(View view) {
                 UpdateService.startUpdating(getContext(), recipes_json);
                 Snackbar.make(view, "Added to widget", Snackbar.LENGTH_SHORT).show();
-                //  Toast.makeText(getContext(), "Added to widget", Toast.LENGTH_SHORT).show();
             }
         });
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         AppBarLayout appBarLayout = view.findViewById(R.id.detail_appbar);
         appBarLayout.addOnOffsetChangedListener(this);
 
@@ -141,9 +141,6 @@ public class DetailFragment extends Fragment implements ListItemClickListener, A
             Intent intent = new Intent(getActivity(), StepInfoActivity.class);
             intent.putExtras(bundle);
             startActivity(intent);
-//            StepDetailFragment stepDetailFragment = new StepDetailFragment();
-//            stepDetailFragment.setArguments(bundle);
-//            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.detail_fragment_container, stepDetailFragment).addToBackStack("null").commit();
 
         }
 

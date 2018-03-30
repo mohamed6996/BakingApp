@@ -53,9 +53,6 @@ public class PlaceholderFragment extends Fragment {
     @BindView(R.id.video_thumbnail)
     ImageView videoThumbnail;
 
-    SimpleExoPlayer simpleExoPlayer;
-
-
     public PlaceholderFragment() {
     }
 
@@ -70,26 +67,17 @@ public class PlaceholderFragment extends Fragment {
 
 
     }
-//
-//    @Override
-//    public void onSaveInstanceState(Bundle savedInstanceState) {
-//        super.onSaveInstanceState(savedInstanceState);
-//        savedInstanceState.putInt("current_window", currentWindow);
-//        savedInstanceState.putLong("play_back_pos", playbackPosition);
-//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_info, container, false);
         ButterKnife.bind(this, rootView);
-        //  setPlayerVisibility();
+        setPlayerVisibility();
         StepModel stepModel = recipeModel.getSteps().get(getArguments().getInt(ARG_SECTION_NUMBER) - 1);
         if (stepModel.getDescription() != null) {
             step_desc.setText(stepModel.getDescription());
         }
-
-
 
 
         return rootView;
@@ -99,23 +87,13 @@ public class PlaceholderFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            playbackPosition = savedInstanceState.getLong("play_back_pos");
-            currentWindow = savedInstanceState.getInt("current_window");
-        }
         initializePlayer();
     }
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//            initializePlayer();
-//    }
 
     @Override
     public void onStop() {
         super.onStop();
-        if(getActivity().isChangingConfigurations()) {
+        if (getActivity().isChangingConfigurations()) {
             Log.i(getTag(), "configuration is changing: keep playing");
         } else {
             releasePlayer();
@@ -123,29 +101,6 @@ public class PlaceholderFragment extends Fragment {
 
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if ((Util.SDK_INT <= 23 || player == null)) {
-//            initializePlayer();
-//        }
-//    }
-
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        if (Util.SDK_INT <= 23) {
-//            releasePlayer();
-//        }
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        if (Util.SDK_INT > 23) {
-//            releasePlayer();
-//        }
-//    }
 
     private void releasePlayer() {
         if (player != null) {
@@ -159,7 +114,6 @@ public class PlaceholderFragment extends Fragment {
 
 
     private void initializePlayer() {
-
         if (player == null) {
 
             player = ExoPlayerFactory.newSimpleInstance(
@@ -172,9 +126,11 @@ public class PlaceholderFragment extends Fragment {
 
             Uri uri = Uri.parse(recipeModel.getSteps().get(getArguments().getInt(ARG_SECTION_NUMBER) - 1).getVideoURL());
             MediaSource mediaSource = buildMediaSource(uri);
-            player.prepare(mediaSource,false,false);
+            player.prepare(mediaSource, false, false);
 
             videoThumbnail.setVisibility(View.GONE);
+        } else {
+            playerView.setPlayer(player);
         }
 
     }
